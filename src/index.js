@@ -46,6 +46,11 @@ const authors = [
   }
 ];
 
+const state = {
+  turnData: getTurnData(authors),
+  highlight: 'wrong',
+}
+
 function getTurnData(authors) {
   const allBooks = authors.reduce((p, c, i) => p.concat(c.books),[]);
   const fourRandomBooks = shuffle(allBooks).slice(0,4);
@@ -57,11 +62,6 @@ function getTurnData(authors) {
       author.books.some((title) => title === answer)
     )
   }
-}
-
-const state = {
-  turnData: getTurnData(authors),
-  highlight: 'wrong',
 }
 
 function onAnswerSelected(answer) {

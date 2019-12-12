@@ -34,7 +34,7 @@ function Turn({author, books, highlight, onAnswerSelected}){
   return (
     <div className="row turn" style={{backgroundColor: hightlightToBgColor(highlight)}}>
       <div className="col-4 offset-1 overflow-hidden">
-        <img src={author.imageUrl} classname="authorimage" alt="Author"/>
+        <img src={author.imageUrl} className="authorimage" alt="Author"/>
       </div>
       <div className="col-6">
         {books.map((title) => <Book title={title} key={title} onClick={onAnswerSelected}>{title}</Book>)}
