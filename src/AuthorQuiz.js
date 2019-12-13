@@ -4,12 +4,14 @@ import './AuthorQuiz.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Hero() {
-  return (<div className="row">
-    <div className="jumbotron col-10 offset-1">
-      <h1>Author Quiz</h1>
-      <p>Select the book written by the author shown</p>
+  return (
+    <div className="row">
+      <div className="jumbotron col-10 offset-1">
+        <h1>Author Quiz</h1>
+        <p>Select the book written by the author shown</p>
+      </div>
     </div>
-  </div>)
+  )
 }
 
 function Book({title, onClick}) {
