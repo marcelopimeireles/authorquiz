@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, withRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
 
@@ -51,13 +51,13 @@ const authors = [
   },
 ];
 
-function resetState() {
-  return {
-    turnData: getTurnData(authors),
-    highlight: '',
-  };
-}
 // without redux
+// function resetState() {
+//   return {
+//     turnData: getTurnData(authors),
+//     highlight: '',
+//   };
+// }
 // let state = resetState();
 
 function reducer(
@@ -72,6 +72,10 @@ function reducer(
           highlight: '',
           turnData: getTurnData(state.authors)
         });
+        case 'ADD_AUTHOR':
+          return Object.assign({}, state, {
+            authors: state.authors.concat(action.author)
+          });
       default: return state;
     }
   // without redux
@@ -99,27 +103,23 @@ function getTurnData(authors) {
 //   state.highlight = isCorrect ? 'correct' : 'wrong';
 //   render();
 // }
-
-function App() {
-  return <ReactRedux.Provider store={store}>
-    <AuthorQuiz />
-  </ReactRedux.Provider>;
-}
-
-const AuthorWrapper = withRouter(({ history }) =>
-  <AddAuthorForm onAddAuthor={(author) =>{
-    authors.push(author);
-    history.push('/');
-}} />);
-
+// function App() {
+//   return <ReactRedux.Provider store={store}>
+//     <AuthorQuiz />
+//   </ReactRedux.Provider>;
+// }
+// without redux
+// const AuthorWrapper = withRouter(({ history }) =>
+//   <AddAuthorForm />);
 // without redux
 // function render() {
+
   ReactDOM.render(
     <BrowserRouter>
-      <>
-        <Route exact path="/" component={App} />
-        <Route exact path="/add" component={AuthorWrapper} />
-      </>
+      <ReactRedux.Provider store={store}>
+        <Route exact path="/" component={AuthorQuiz} />
+        <Route path="/add" component={AddAuthorForm} />
+      </ReactRedux.Provider>
     </BrowserRouter>,
     document.getElementById('root')
   );
