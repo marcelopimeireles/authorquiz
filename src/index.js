@@ -82,7 +82,9 @@ function reducer(
   // return state;
 }
 
-let store = Redux.createStore(reducer);
+let store = Redux.createStore(reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 function getTurnData(authors) {
   const allBooks = authors.reduce((p, c, i) => p.concat(c.books), []);
