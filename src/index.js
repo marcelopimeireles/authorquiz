@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, withRouter } from 'react-router-dom';
+import * as Redux from 'redux';
+import * as ReactRedux from 'react-redux';
+
 import { shuffle, sample } from 'underscore';
 import AuthorQuiz from './AuthorQuiz';
 import AddAuthorForm from './AddAuthorForm';
@@ -54,8 +57,28 @@ function resetState() {
     highlight: '',
   };
 }
+// without redux
+// let state = resetState();
 
-let state = resetState();
+function reducer(
+  state = { authors, turnData: getTurnData(authors), highlight: ''},
+  action) {
+    switch (action.type) {
+      case 'ANSWER_SELECTED':
+        const isCorrect = state.turnData.author.books.some(book => book === action.answer);
+        return Object.assign({}, state, { highlight: isCorrect ? 'correct' : 'wrong'});
+      case 'CONTINUE':
+        return Object.assign({}, state, {
+          highlight: '',
+          turnData: getTurnData(state.authors)
+        });
+      default: return state;
+    }
+  // without redux
+  // return state;
+}
+
+let store = Redux.createStore(reducer);
 
 function getTurnData(authors) {
   const allBooks = authors.reduce((p, c, i) => p.concat(c.books), []);
@@ -70,19 +93,17 @@ function getTurnData(authors) {
   };
 }
 
-function onAnswerSelected(answer) {
-  const isCorrect = state.turnData.author.books.some(book => book === answer);
-  state.highlight = isCorrect ? 'correct' : 'wrong';
-  render();
-}
+// without redux
+// function onAnswerSelected(answer) {
+//   const isCorrect = state.turnData.author.books.some(book => book === answer);
+//   state.highlight = isCorrect ? 'correct' : 'wrong';
+//   render();
+// }
 
 function App() {
-  return <AuthorQuiz {...state}
-          onAnswerSelected={onAnswerSelected}
-          onContinue={()=> {
-            state = resetState();
-            render();
-          }}/>;
+  return <ReactRedux.Provider store={store}>
+    <AuthorQuiz />
+  </ReactRedux.Provider>;
 }
 
 const AuthorWrapper = withRouter(({ history }) =>
@@ -91,7 +112,8 @@ const AuthorWrapper = withRouter(({ history }) =>
     history.push('/');
 }} />);
 
-function render() {
+// without redux
+// function render() {
   ReactDOM.render(
     <BrowserRouter>
       <>
@@ -101,7 +123,8 @@ function render() {
     </BrowserRouter>,
     document.getElementById('root')
   );
-}
+// without redux
+// }
+// render();
 
-render();
 serviceWorker.unregister();
